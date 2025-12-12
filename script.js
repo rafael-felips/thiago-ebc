@@ -14,6 +14,9 @@ const STORAGE_KEY = 'tiago_licao3_answers';
 const FONT_SIZE_KEY = 'tiago_licao3_font_size';
 let allAnswers = [];
 let currentFontSizeMultiplier = 1;
+const FONT_SIZE_STEP = 0.1;
+const FONT_SIZE_MIN = 0.7;
+const FONT_SIZE_MAX = 2.0;
 
 const questions = {
   "q1-1": "Que comportamento Tiago advertiu contra?",
@@ -62,22 +65,29 @@ function loadAnswersFromLocalStorage() {
 
 // Controle de tamanho de fonte
 function updateFontSize(multiplier) {
+  // Limitar entre mínimo e máximo
+  if (multiplier < FONT_SIZE_MIN) multiplier = FONT_SIZE_MIN;
+  if (multiplier > FONT_SIZE_MAX) multiplier = FONT_SIZE_MAX;
+  
   currentFontSizeMultiplier = multiplier;
   document.documentElement.style.setProperty('--font-size-multiplier', multiplier);
   localStorage.setItem(FONT_SIZE_KEY, multiplier);
   
-  // Atualizar botões de controle
-  document.querySelectorAll('.font-size-btn').forEach(btn => {
-    btn.classList.remove('active');
-  });
+  // Atualizar display de porcentagem
+  const percentage = Math.round(multiplier * 100);
+  document.getElementById('font-size-display').textContent = percentage + '%';
   
-  if (multiplier === 0.8) {
-    document.getElementById('decrease-font').classList.add('active');
-  } else if (multiplier === 1) {
-    document.getElementById('reset-font').classList.add('active');
-  } else if (multiplier === 1.2) {
-    document.getElementById('increase-font').classList.add('active');
-  }
+  // Atualizar estado dos botões (desabilitar se no limite)
+  document.getElementById('decrease-font').disabled = multiplier <= FONT_SIZE_MIN;
+  document.getElementById('increase-font').disabled = multiplier >= FONT_SIZE_MAX;
+}
+
+function increaseFontSize() {
+  updateFontSize(currentFontSizeMultiplier + FONT_SIZE_STEP);
+}
+
+function decreaseFontSize() {
+  updateFontSize(currentFontSizeMultiplier - FONT_SIZE_STEP);
 }
 
 function initFontSize() {
@@ -194,15 +204,11 @@ document.querySelectorAll('textarea').forEach(textarea => {
 
 // Event listeners para controle de tamanho de fonte
 document.getElementById('decrease-font').addEventListener('click', () => {
-  updateFontSize(0.8);
-});
-
-document.getElementById('reset-font').addEventListener('click', () => {
-  updateFontSize(1);
+  decreaseFontSize();
 });
 
 document.getElementById('increase-font').addEventListener('click', () => {
-  updateFontSize(1.2);
+  increaseFontSize();
 });
 
 document.querySelectorAll('.save-btn').forEach(btn => {

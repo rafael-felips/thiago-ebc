@@ -37,7 +37,16 @@ html, body {
   display: flex;
   gap: 10px;
   justify-content: center;
+  align-items: center;
   margin-bottom: 15px;
+}
+
+.font-size-display {
+  min-width: 50px;
+  text-align: center;
+  font-weight: 600;
+  color: #667eea;
+  font-size: 14px;
 }
 
 .font-size-btn {
@@ -47,9 +56,14 @@ html, body {
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: bold;
   transition: all 0.3s ease;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .font-size-btn:hover {
@@ -57,8 +71,10 @@ html, body {
   transform: translateY(-2px);
 }
 
-.font-size-btn.active {
-  background: #764ba2;
+.font-size-btn:disabled {
+  background: #cbd5e0;
+  cursor: not-allowed;
+  transform: none;
 }
 
 header {
@@ -257,17 +273,20 @@ textarea:focus {
   font-weight: bold;
   color: #764ba2;
   margin-bottom: 8px;
+  font-size: calc(16px * var(--font-size-multiplier));
 }
 
 .summary-answer {
   color: #2d3748;
   line-height: 1.6;
+  font-size: calc(15px * var(--font-size-multiplier));
 }
 
 .empty-state {
   text-align: center;
   padding: 60px 20px;
   color: #718096;
+  font-size: calc(16px * var(--font-size-multiplier));
 }
 
 .empty-state-icon {
